@@ -7,21 +7,26 @@ from utils.logger import logger
         "data",read_users_csv())
 
 def test_login_exitoso(driver,data):
-    logger.info("Iniciando prueba de login")
-    login_page = LoginPage(driver)
+    try:
+        logger.info("Iniciando prueba de login")
+        login_page = LoginPage(driver)
 
-    driver.get("https://www.saucedemo.com/")
-    logger.info("Pagina abierta correctamente")
+        driver.get("https://www.saucedemo.com/")
+        logger.info("Pagina abierta correctamente")
 
-    login_page.login(data["usuario"],data["password"])
-    logger.info("Ingreso de credenciales")
+        login_page.login(data["usuario"],data["password"])
+        logger.info("Ingreso de credenciales")
 
-    if data["tipo_usuario"] == "user_ok":
-        assert "/inventory.html" in driver.current_url
-        logger.info("Login exitoso")
+        if data["tipo_usuario"] == "user_ok":
+            assert "/inventory.html" in driver.current_url
+            logger.info("Login exitoso")
 
-    elif data["tipo_usuario"] == "user_error":
-        error = login_page.obtener_error_messege()
-        print(error)
-        assert "Epic sadface" in error
-        logger.info("Prueba de mensaje de error valida")
+        elif data["tipo_usuario"] == "user_error":
+            error = login_page.obtener_error_messege()
+            print(error)
+            assert "Epic sadface" in error
+            logger.info("Prueba de mensaje de error valida")
+
+    except Exception:
+        logger.info("Error durante prueba de login")
+        raise
